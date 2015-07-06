@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Column Chart</title>	   
+	<script type="text/javascript" src="raphael-min.js"> </script>		
+</head>	
+<body>	
+	<script type="text/javascript">
+	
+var can={							
+		 paperh : 1000,							
+		 paperw : 1000						  
+		 };
+				
+var data=					
+		[							
+		{
+		"label" : "Rent",								
+		"amount" : "300"							
+		},							
+		{								
+		"label" : "Electricity",								
+		"amount" : "400"							
+		},							
+		{								
+		"label" : "Conveyance",								
+		"amount" : "150"							
+		},							
+		{								
+		"label" : "Food",								
+		"amount" : "250"							
+		},														
+		{								
+		"label" : "Miscellaneous",								
+		"amount" : "300"							
+		},
+		{
+		"label" : "Travelling",
+		"amount" : "120"
+		}					
+		];
+						
+var maxel = data[0].amount;						
+var len = data.length;
+
+function max_elem()						
+	{								
+		for( var j = 0; j < len; j++ )							
+		{								
+			if ( data[j].amount > maxel)
+			{	
+				maxel = data[j].amount;									
+			}							
+		}						
+	}						
+max_elem();
+
+		var paper = new Raphael(0, 0, can.paperw, can.paperh);					
+		var rw = 600, rh = 450;					
+		var ox = 100, oy = 100;					
+		var height = rh*0.8;					
+		var width = rw;					
+		var xscale = width/(2*(len)+1);
+		var yscale = height/maxel;
+		var rect1 = paper.rect( ox, oy, rw, rh);
+
+		var txt1 = paper.text( ((rw/2)+80), (oy+10), " 2D Column Chart " );
+		txt1.attr({ "font-family": "arial", fill: "red", "font-size": 16});
+		var txt2 = paper.text( ((rw/2)+80), (oy+45), " Expenditure " );
+		txt2.attr({ "font-family": "arial", fill: "grey", "font-size": 16}); 
+		var txt6 = paper.text( ((rw/2)+80), (oy+rh+50), " Overheads or Expenses " );
+		txt6.attr({ "font-family": "arial", fill: "blue", "font-size": 16}); 
+		
+		var txt3 = paper.text( (ox-80), ((rh/2)+80), "Amount ( in Rs.)")
+			 .rotate(270);
+		txt3.attr({ "font-family": "arial", fill: "blue ", "font-size": 16});
+		var x = ox + xscale ;
+				
+		for(i = 0; i<len; i++)
+		{
+				var z = yscale * data[i].amount;
+				var lines = paper.path("M" + ox + " " + (550-z) + " L" + 700 + " " + (550-z))
+							.attr("stroke-dasharray","-")
+							.attr("stroke","grey");
+		}
+
+//var colours = [#FF0000, #B82EE6, #FF6600, #FF3399, #3333FF, #66FF33, #FFFF00, #00CCFF];
+
+function calculate()
+{
+		for( var i = 0; i < len; i++ )						
+		{	
+			var h = yscale * data[i].amount;
+			var w = xscale ;	
+			var y = oy;
+			var l= data[i].label;
+			var a= data[i].amount;
+			columns( x, y, w, h, l, a);
+			x = x + (2 * xscale) ;
+		}
+}
+calculate();
+					
+function columns( x, y, w, h, l, a)
+{
+			var rect2 = paper.rect( x, y, w, h);
+			rect2.transform("r180, 400, 325");			
+			rect2.attr( "fill", "cyan") ;							
+			rect2.attr( "stroke", "black");
+			var txt4= paper.text( (x+25), 560, l);
+			txt4.attr({ "font-family": "arial", fill: "grey", "font-size": 14});
+			var txt5= paper.text( (ox-20), (550-h), a);
+			txt5.attr({ "font-family": "arial", fill: "grey", "font-size": 14});
+}					
+
+		</script>
+</body>
+</html>
